@@ -279,55 +279,73 @@
     /* English Text */
     .english-text {
       font-size: 15px;
-      line-height: 1.7;
-      color: #e0e0e0;
+      line-height: 1.8;
+      color: #d4d4d4;
+      max-width: 900px;
     }
 
     .english-text h1 {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 600;
-      margin: 24px 0 16px 0;
-      color: #fff;
+      margin: 32px 0 20px 0;
+      color: #e8e8e8;
+      letter-spacing: -0.02em;
     }
 
     .english-text h2 {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
-      margin: 20px 0 12px 0;
-      color: #fff;
+      margin: 28px 0 14px 0;
+      color: #e0e0e0;
+      letter-spacing: -0.01em;
     }
 
     .english-text h3 {
       font-size: 16px;
       font-weight: 600;
-      margin: 16px 0 8px 0;
-      color: #ccc;
+      margin: 20px 0 10px 0;
+      color: #d8d8d8;
     }
 
     .english-text ul, .english-text ol {
-      margin: 12px 0 12px 24px;
+      margin: 16px 0 16px 28px;
     }
 
     .english-text li {
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      line-height: 1.7;
     }
 
     .english-text strong {
-      color: #0070f3;
+      color: #e8e8e8;
       font-weight: 600;
     }
 
     .english-text code {
       background: #1a1a1a;
       padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'SF Mono', Monaco, monospace;
-      font-size: 13px;
-      color: #0070f3;
+      border-radius: 3px;
+      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+      font-size: 14px;
+      color: #d4d4d4;
     }
 
     .english-text p {
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+
+    .english-text em {
+      font-style: italic;
+      color: #d8d8d8;
+    }
+
+    .english-text blockquote {
+      border-left: 3px solid #333;
+      padding-left: 20px;
+      margin: 20px 0;
+      color: #b8b8b8;
+      font-style: italic;
     }
 
     /* Loading Overlay */
@@ -665,8 +683,8 @@
         translateBtn.classList.remove('loading');
         translateBtn.textContent = 'Translate';
 
-        // Switch to Japanese tab to show results
-        document.querySelector('.tab[data-tab="japanese"]').click();
+        // Switch to English tab to show results
+        document.querySelector('.tab[data-tab="english"]').click();
 
       } catch (error) {
         console.error('Translation error:', error);
