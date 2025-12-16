@@ -203,6 +203,12 @@
       display: flex;
       border-bottom: 1px solid #333;
       padding: 0 24px;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .tabs::-webkit-scrollbar {
+      height: 4px;
     }
 
     .tab {
@@ -215,6 +221,8 @@
       cursor: pointer;
       border-bottom: 2px solid transparent;
       transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .tab:hover {
@@ -512,8 +520,7 @@
       <div class="results-area">
         <!-- Tabs -->
         <div class="tabs">
-          <button class="tab active" data-tab="japanese">Japanese (Corrected OCR)</button>
-          <button class="tab" data-tab="english">English Translation</button>
+          <button class="tab active" data-tab="japaneseTab">Japanese OCR</button>
         </div>
 
         <!-- Tab Content -->
@@ -522,14 +529,6 @@
             <div class="empty-state-icon">🗡️</div>
             <h3>No translation yet</h3>
             <p>Upload an image and click Translate to see the corrected Japanese OCR</p>
-          </div>
-        </div>
-
-        <div class="tab-content" id="englishTab">
-          <div class="empty-state">
-            <div class="empty-state-icon">🗡️</div>
-            <h3>No translation yet</h3>
-            <p>Upload an image and click Translate to see the English translation</p>
           </div>
         </div>
       </div>
@@ -546,6 +545,7 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
     let uploadedFile = null;
+    let translations = {}; // Store translations by model name
 
     // Elements
     const uploadZone = document.getElementById('uploadZone');
@@ -556,8 +556,8 @@
     const errorDiv = document.getElementById('error');
     const loadingOverlay = document.getElementById('loadingOverlay');
     const loadingStep = document.getElementById('loadingStep');
-    const japaneseTab = document.getElementById('japaneseTab');
-    const englishTab = document.getElementById('englishTab');
+    const tabsContainer = document.querySelector('.tabs');
+    const resultsArea = document.querySelector('.results-area');
 
     // Error handling
     function showError(message) {
@@ -617,21 +617,90 @@
     }
 
     // Tab switching
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabName = tab.dataset.tab;
+    function switchToTab(tabId) {
+      // Update active tab button
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      const tabButton = document.querySelector(`.tab[data-tab="${tabId}"]`);
+      if (tabButton) {
+        tabButton.classList.add('active');
+      }
 
-        // Update active tab
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        // Update active content
-        document.querySelectorAll('.tab-content').forEach(content => {
-          content.classList.remove('active');
-        });
-        document.getElementById(tabName + 'Tab').classList.add('active');
+      // Update active content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
       });
-    });
+      const tabContent = document.getElementById(tabId);
+      if (tabContent) {
+        tabContent.classList.add('active');
+      }
+    }
+
+    // Add tab click listeners
+    function attachTabListeners() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          switchToTab(tab.dataset.tab);
+        });
+      });
+    }
+
+    // Initial tab listeners
+    attachTabListeners();
+
+    // Get model display name
+    function getModelDisplayName(modelId) {
+      const modelNames = {
+        'openai/gpt-5.2': 'GPT-5.2',
+        'anthropic/claude-sonnet-4.5': 'Claude Sonnet 4.5',
+        'qwen/qwen-2.5-72b-instruct': 'Qwen 2.5 72B',
+        'deepseek/deepseek-v3.2': 'DeepSeek V3.2'
+      };
+      return modelNames[modelId] || modelId;
+    }
+
+    // Create or update model tab
+    function createModelTab(modelId, englishText, japaneseText) {
+      const modelName = getModelDisplayName(modelId);
+      const tabId = `model-${modelId.replace(/[^a-zA-Z0-9]/g, '-')}`;
+
+      // Update Japanese tab if needed
+      const japaneseTab = document.getElementById('japaneseTab');
+      if (japaneseTab && japaneseText) {
+        japaneseTab.innerHTML = `<div class="japanese-text">${japaneseText}</div>`;
+      }
+
+      // Check if tab already exists
+      let existingTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+      let existingContent = document.getElementById(tabId);
+
+      if (existingTab && existingContent) {
+        // Update existing tab content
+        existingContent.innerHTML = `<div class="english-text">${marked.parse(englishText)}</div>`;
+      } else {
+        // Create new tab button
+        const newTabButton = document.createElement('button');
+        newTabButton.className = 'tab';
+        newTabButton.dataset.tab = tabId;
+        newTabButton.textContent = modelName;
+        newTabButton.addEventListener('click', () => switchToTab(tabId));
+        tabsContainer.appendChild(newTabButton);
+
+        // Create new tab content
+        const newTabContent = document.createElement('div');
+        newTabContent.className = 'tab-content';
+        newTabContent.id = tabId;
+        newTabContent.innerHTML = `<div class="english-text">${marked.parse(englishText)}</div>`;
+
+        // Insert after tabs but before other content
+        const firstTabContent = document.querySelector('.tab-content');
+        if (firstTabContent && firstTabContent.parentNode) {
+          firstTabContent.parentNode.appendChild(newTabContent);
+        }
+      }
+
+      // Switch to the new/updated tab
+      switchToTab(tabId);
+    }
 
     // Translation
     async function startTranslation() {
@@ -674,17 +743,19 @@
         loadingStep.textContent = 'Step 3/3: Finalizing...';
         const result = await response.json();
 
-        // Display results
-        japaneseTab.innerHTML = `<div class="japanese-text">${result.japanese}</div>`;
-        englishTab.innerHTML = `<div class="english-text">${marked.parse(result.english)}</div>`;
+        // Store translation
+        translations[model] = {
+          japanese: result.japanese,
+          english: result.english
+        };
+
+        // Create or update model tab
+        createModelTab(model, result.english, result.japanese);
 
         loadingOverlay.classList.remove('visible');
         translateBtn.disabled = false;
         translateBtn.classList.remove('loading');
         translateBtn.textContent = 'Translate';
-
-        // Switch to English tab to show results
-        document.querySelector('.tab[data-tab="english"]').click();
 
       } catch (error) {
         console.error('Translation error:', error);
