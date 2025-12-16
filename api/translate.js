@@ -106,13 +106,14 @@ async function translateToMarkdown(correctedOCR, model) {
   const translationPrompt = `You are a specialist in translating Japanese sword catalog entries (重要刀剣等図譜).
 
 **CRITICAL INSTRUCTIONS:**
-1. Translate EVERY SINGLE WORD and detail from the Japanese text
+1. Translate EVERY SINGLE WORD and detail from the Japanese text into English
 2. Do NOT summarize, condense, or omit ANY information
-3. Preserve all technical terminology with explanations in parentheses
-4. Include ALL measurements, dates, names, and descriptions
-5. Maintain the original structure and flow
-6. If the Japanese mentions something, it MUST appear in English
-7. Translate the historical background section VERBATIM and COMPLETELY
+3. Translate technical terminology directly into English (do NOT include Japanese in parentheses)
+4. Only use parentheses for brief English clarifications or explanations, never for Japanese text
+5. Include ALL measurements, dates, names, and descriptions fully translated to English
+6. Maintain the original structure and flow
+7. If the Japanese mentions something, it MUST appear in the English translation
+8. Translate the historical background section VERBATIM and COMPLETELY into English
 
 **Output Format:**
 
@@ -157,6 +158,12 @@ async function translateToMarkdown(correctedOCR, model) {
 [Any additional observations or scholarly notes]
 
 ---
+
+**IMPORTANT FORMATTING RULES:**
+- Write ONLY in English - do not include Japanese characters, hiragana, katakana, or kanji anywhere in your translation
+- Translate all Japanese terms into English equivalents
+- If a technical term needs explanation, provide it in English within parentheses
+- Example: Instead of "notare (のたれ)", write "notare (undulating pattern)" or simply "undulating temper line"
 
 **Japanese Text:**
 ${correctedOCR}
