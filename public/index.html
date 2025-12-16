@@ -374,6 +374,50 @@
       color: #93c5fd;
     }
 
+    .debug-console {
+      background: #1c1917;
+      border: 2px solid #78716c;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .debug-console h3 {
+      color: #fbbf24;
+      margin-bottom: 15px;
+      font-size: 1.1em;
+    }
+
+    .debug-log {
+      color: #a8a29e;
+      line-height: 1.8;
+    }
+
+    .debug-log div {
+      padding: 4px 0;
+      border-bottom: 1px solid #292524;
+    }
+
+    .debug-log .success {
+      color: #10b981;
+    }
+
+    .debug-log .error {
+      color: #ef4444;
+    }
+
+    .debug-log .info {
+      color: #60a5fa;
+    }
+
+    .debug-log .warning {
+      color: #fbbf24;
+    }
+
     @media (max-width: 768px) {
       .options {
         grid-template-columns: 1fr;
@@ -416,6 +460,14 @@
     </div>
 
     <div class="main">
+      <!-- Debug Console -->
+      <div class="debug-console">
+        <h3>🔍 Debug Console</h3>
+        <div class="debug-log" id="debugLog">
+          <div class="info">Ready. Upload an image and click Translate to see debug info...</div>
+        </div>
+      </div>
+
       <!-- Error Display -->
       <div class="error" id="error"></div>
 
@@ -494,6 +546,30 @@
   <script>
     let uploadedFile = null;
 
+    // Debug logging
+    const debugLog = document.getElementById('debugLog');
+    let logCount = 0;
+
+    function addDebugLog(message, type = 'info') {
+      logCount++;
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = document.createElement('div');
+      logEntry.className = type;
+      logEntry.textContent = `[${timestamp}] ${logCount}. ${message}`;
+      debugLog.appendChild(logEntry);
+      debugLog.scrollTop = debugLog.scrollHeight;
+      console.log(`[DEBUG ${type.toUpperCase()}]`, message);
+    }
+
+    // Global error handler
+    window.addEventListener('error', (e) => {
+      addDebugLog(`UNCAUGHT ERROR: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+    });
+
+    window.addEventListener('unhandledrejection', (e) => {
+      addDebugLog(`UNHANDLED PROMISE REJECTION: ${e.reason}`, 'error');
+    });
+
     // File upload handling
     const uploadSection = document.getElementById('uploadSection');
     const fileInput = document.getElementById('fileInput');
@@ -501,6 +577,8 @@
     const previewImage = document.getElementById('previewImage');
     const translateBtn = document.getElementById('translateBtn');
     const errorDiv = document.getElementById('error');
+
+    addDebugLog('JavaScript loaded successfully', 'success');
 
     function showError(message) {
       errorDiv.innerHTML = `<strong>Error:</strong> ${message}`;
@@ -537,9 +615,10 @@
     });
 
     function handleFile(file) {
-      console.log('File selected:', file.name);
+      addDebugLog(`File selected: ${file.name} (${file.type}, ${(file.size/1024).toFixed(1)} KB)`, 'info');
 
       if (!file.type.startsWith('image/')) {
+        addDebugLog('Invalid file type - not an image', 'error');
         showError('Please upload an image file (JPG, PNG, etc.)');
         return;
       }
@@ -553,6 +632,7 @@
         previewImage.src = e.target.result;
         previewSection.style.display = 'block';
         translateBtn.disabled = false;
+        addDebugLog('Image preview loaded. Translate button enabled.', 'success');
       };
       reader.readAsDataURL(file);
     }
@@ -578,30 +658,37 @@
 
     // Translation
     async function translate() {
+      addDebugLog('=== TRANSLATE FUNCTION CALLED ===', 'warning');
+
       if (!uploadedFile) {
+        addDebugLog('No file uploaded', 'error');
         showError('Please upload an image first');
         return;
       }
 
-      console.log('Starting translation...');
+      addDebugLog(`File ready: ${uploadedFile.name}`, 'info');
       hideError();
 
       const model = document.getElementById('modelSelect').value;
       const format = document.getElementById('formatSelect').value;
+      addDebugLog(`Model: ${model}, Format: ${format}`, 'info');
 
       // Show loading
       document.getElementById('loading').classList.add('visible');
       document.getElementById('results').classList.remove('visible');
       translateBtn.disabled = true;
+      addDebugLog('UI: Loading screen shown, translate button disabled', 'info');
 
       try {
         // Prepare form data
+        addDebugLog('Creating FormData...', 'info');
         const formData = new FormData();
         formData.append('image', uploadedFile);
         formData.append('model', model);
         formData.append('format', format);
+        addDebugLog('FormData created successfully', 'success');
 
-        console.log('Sending request to API...');
+        addDebugLog('Sending POST request to /.netlify/functions/translate...', 'info');
         updateLoadingStep('Step 1/3: Running Google Cloud Vision OCR...');
 
         // Call API
@@ -610,33 +697,42 @@
           body: formData
         });
 
-        console.log('Response status:', response.status);
+        addDebugLog(`Response received! Status: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
 
         if (!response.ok) {
+          addDebugLog('Response not OK, parsing error...', 'warning');
           let errorMessage = 'Translation failed';
           try {
             const error = await response.json();
             errorMessage = error.error || error.message || errorMessage;
+            addDebugLog(`Error from server: ${errorMessage}`, 'error');
           } catch (e) {
             errorMessage = `Server error: ${response.status} ${response.statusText}`;
+            addDebugLog(`Could not parse error JSON: ${e.message}`, 'error');
           }
           throw new Error(errorMessage);
         }
 
         updateLoadingStep('Step 3/3: Finalizing translation...');
+        addDebugLog('Parsing response JSON...', 'info');
         const result = await response.json();
-        console.log('Translation complete!');
+        addDebugLog('Response parsed successfully!', 'success');
+        addDebugLog(`Japanese text length: ${result.japanese?.length || 0} chars`, 'info');
+        addDebugLog(`English text length: ${result.english?.length || 0} chars`, 'info');
 
         // Display results
+        addDebugLog('Rendering results to page...', 'info');
         document.getElementById('japaneseText').textContent = result.japanese;
         document.getElementById('englishText').innerHTML = marked.parse(result.english);
 
         document.getElementById('loading').classList.remove('visible');
         document.getElementById('results').classList.add('visible');
         translateBtn.disabled = false;
+        addDebugLog('=== TRANSLATION COMPLETE ===', 'success');
 
       } catch (error) {
-        console.error('Translation error:', error);
+        addDebugLog(`CAUGHT ERROR: ${error.message}`, 'error');
+        addDebugLog(`Error stack: ${error.stack}`, 'error');
         document.getElementById('loading').classList.remove('visible');
         showError(error.message || 'Translation failed. Please check the console for details.');
         translateBtn.disabled = false;
