@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oshi3 Nihonto Translator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
     * {
       margin: 0;
       padding: 0;
@@ -14,214 +15,349 @@
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
-      min-height: 100vh;
-      line-height: 1.6;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      height: 100vh;
     }
 
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
+    .app {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
     }
 
+    /* Header */
     .header {
-      text-align: center;
-      padding: 60px 20px;
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-      border-radius: 20px;
-      margin-bottom: 40px;
-      border: 1px solid #334155;
+      border-bottom: 1px solid #333;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .header h1 {
-      font-size: 3em;
-      font-weight: 700;
-      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .header p {
-      font-size: 1.2em;
-      color: #94a3b8;
+    .header-info {
+      font-size: 13px;
+      color: #888;
     }
 
-    .main {
-      background: #1e293b;
-      border-radius: 20px;
-      padding: 40px;
-      border: 1px solid #334155;
+    /* Main Layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      height: 100%;
+      overflow: hidden;
     }
 
-    .upload-section {
-      border: 3px dashed #475569;
-      border-radius: 16px;
-      padding: 60px 40px;
+    /* Sidebar */
+    .sidebar {
+      background: #000;
+      border-right: 1px solid #333;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Upload Area */
+    .upload-zone {
+      border: 2px dashed #333;
+      border-radius: 8px;
+      padding: 32px 20px;
       text-align: center;
-      margin-bottom: 30px;
-      transition: all 0.3s ease;
       cursor: pointer;
-      background: #0f172a;
+      transition: all 0.2s;
+      background: #0a0a0a;
     }
 
-    .upload-section:hover {
-      border-color: #60a5fa;
-      background: #1e293b;
+    .upload-zone:hover {
+      border-color: #666;
+      background: #111;
     }
 
-    .upload-section.dragover {
-      border-color: #60a5fa;
-      background: #1e293b;
-      transform: scale(1.02);
+    .upload-zone.has-file {
+      border-color: #0070f3;
+      background: #001a33;
     }
 
     .upload-icon {
-      font-size: 5em;
-      margin-bottom: 20px;
-      filter: grayscale(0.3);
+      font-size: 32px;
+      margin-bottom: 12px;
     }
 
-    .upload-section h2 {
-      font-size: 1.5em;
-      color: #e2e8f0;
-      margin-bottom: 10px;
+    .upload-zone h3 {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
     }
 
-    .upload-section p {
-      color: #94a3b8;
-      font-size: 1em;
+    .upload-zone p {
+      font-size: 13px;
+      color: #888;
     }
 
     .file-input {
       display: none;
     }
 
-    .upload-btn {
-      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-      color: white;
-      border: none;
-      padding: 16px 40px;
-      font-size: 1.1em;
-      font-weight: 600;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 20px;
-    }
-
-    .upload-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-    }
-
-    .preview-section {
+    /* Preview */
+    .preview {
       display: none;
-      margin-bottom: 30px;
-      background: #0f172a;
-      padding: 20px;
-      border-radius: 16px;
-      border: 1px solid #334155;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
     }
 
-    .preview-section h3 {
-      margin-bottom: 15px;
-      color: #e2e8f0;
-      font-size: 1.2em;
-    }
-
-    .preview-section img {
-      max-width: 100%;
-      border-radius: 12px;
-      border: 1px solid #334155;
-    }
-
-    .options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .option-group label {
+    .preview.visible {
       display: block;
-      font-weight: 600;
-      color: #e2e8f0;
-      font-size: 1em;
-      margin-bottom: 10px;
     }
 
-    .option-group select {
+    .preview img {
       width: 100%;
-      padding: 14px;
-      background: #0f172a;
-      border: 2px solid #334155;
-      border-radius: 12px;
-      color: #e2e8f0;
-      font-size: 1em;
-      transition: all 0.3s ease;
+      display: block;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .control-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #ccc;
+    }
+
+    .control-group select {
+      width: 100%;
+      padding: 10px 12px;
+      background: #0a0a0a;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .option-group select:hover {
-      border-color: #475569;
+    .control-group select:hover {
+      border-color: #555;
     }
 
-    .option-group select:focus {
+    .control-group select:focus {
       outline: none;
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+      border-color: #0070f3;
     }
 
+    /* Button */
     .translate-btn {
       width: 100%;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
+      padding: 12px;
+      background: #0070f3;
+      color: #fff;
       border: none;
-      padding: 20px;
-      font-size: 1.3em;
-      font-weight: 700;
-      border-radius: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.3s ease;
-      margin-bottom: 30px;
+      transition: all 0.2s;
     }
 
     .translate-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      background: #0060df;
     }
 
     .translate-btn:disabled {
-      background: #334155;
+      background: #1a1a1a;
+      color: #666;
       cursor: not-allowed;
-      transform: none;
     }
 
-    .loading {
+    .translate-btn.loading {
+      background: #1a1a1a;
+      color: #888;
+    }
+
+    /* Results Area */
+    .results-area {
+      background: #0a0a0a;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #333;
+      padding: 0 24px;
+    }
+
+    .tab {
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      color: #888;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab:hover {
+      color: #fff;
+    }
+
+    .tab.active {
+      color: #fff;
+      border-bottom-color: #0070f3;
+    }
+
+    .tab-content {
       display: none;
-      background: #0f172a;
-      padding: 40px;
-      border-radius: 16px;
-      text-align: center;
-      margin-bottom: 30px;
-      border: 1px solid #334155;
+      padding: 24px;
+      overflow-y: auto;
+      flex: 1;
     }
 
-    .loading.visible {
+    .tab-content.active {
       display: block;
     }
 
+    /* Empty State */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #666;
+      text-align: center;
+      padding: 48px;
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+
+    .empty-state h3 {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #888;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Japanese Text */
+    .japanese-text {
+      font-family: 'Noto Serif JP', 'MS Mincho', 'Yu Mincho', serif;
+      font-size: 16px;
+      line-height: 2;
+      white-space: pre-wrap;
+      color: #fff;
+    }
+
+    /* English Text */
+    .english-text {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #e0e0e0;
+    }
+
+    .english-text h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 24px 0 16px 0;
+      color: #fff;
+    }
+
+    .english-text h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 20px 0 12px 0;
+      color: #fff;
+    }
+
+    .english-text h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 16px 0 8px 0;
+      color: #ccc;
+    }
+
+    .english-text ul, .english-text ol {
+      margin: 12px 0 12px 24px;
+    }
+
+    .english-text li {
+      margin-bottom: 6px;
+    }
+
+    .english-text strong {
+      color: #0070f3;
+      font-weight: 600;
+    }
+
+    .english-text code {
+      background: #1a1a1a;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 13px;
+      color: #0070f3;
+    }
+
+    .english-text p {
+      margin-bottom: 12px;
+    }
+
+    /* Loading Overlay */
+    .loading-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 400px;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .loading-overlay.visible {
+      display: flex;
+    }
+
     .spinner {
-      border: 4px solid #334155;
-      border-top: 4px solid #60a5fa;
+      border: 3px solid #333;
+      border-top: 3px solid #0070f3;
       border-radius: 50%;
-      width: 60px;
-      height: 60px;
+      width: 48px;
+      height: 48px;
       animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
     }
 
     @keyframes spin {
@@ -230,314 +366,161 @@
     }
 
     .loading-text {
-      font-size: 1.3em;
-      color: #e2e8f0;
-      font-weight: 600;
-      margin-bottom: 10px;
+      font-size: 14px;
+      color: #ccc;
     }
 
     .loading-step {
-      color: #94a3b8;
-      font-size: 1em;
+      font-size: 13px;
+      color: #888;
     }
 
-    .error {
-      background: #7f1d1d;
-      border: 2px solid #dc2626;
-      color: #fecaca;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
+    /* Error Message */
+    .error-message {
       display: none;
+      padding: 12px 16px;
+      background: #3d0000;
+      border: 1px solid #8b0000;
+      border-radius: 6px;
+      color: #ff6b6b;
+      font-size: 13px;
+      margin-bottom: 16px;
     }
 
-    .error.visible {
+    .error-message.visible {
       display: block;
     }
 
-    .error strong {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 1.1em;
+    /* Info Banner */
+    .info-banner {
+      padding: 12px 16px;
+      background: #0a1929;
+      border: 1px solid #1a365d;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #90cdf4;
+      line-height: 1.5;
     }
 
-    .results {
-      display: none;
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
 
-    .results.visible {
-      display: block;
+    ::-webkit-scrollbar-track {
+      background: #000;
     }
 
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #334155;
-    }
-
-    .tab {
-      padding: 16px 30px;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-size: 1.1em;
-      font-weight: 600;
-      color: #94a3b8;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .tab:hover {
-      color: #e2e8f0;
-    }
-
-    .tab.active {
-      color: #60a5fa;
-      border-bottom-color: #60a5fa;
-    }
-
-    .tab-content {
-      display: none;
-      padding: 30px;
-      background: #0f172a;
-      border-radius: 12px;
-      border: 1px solid #334155;
-      min-height: 500px;
-      max-height: 800px;
-      overflow-y: auto;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .japanese-text {
-      font-family: 'MS Mincho', 'Yu Mincho', 'Noto Serif JP', serif;
-      font-size: 1.3em;
-      line-height: 2.2;
-      white-space: pre-wrap;
-      color: #e2e8f0;
-    }
-
-    .english-text {
-      font-size: 1.05em;
-      line-height: 1.9;
-      color: #e2e8f0;
-    }
-
-    .english-text h1 {
-      color: #60a5fa;
-      margin-top: 30px;
-      margin-bottom: 15px;
-      font-size: 2em;
-    }
-
-    .english-text h2 {
-      color: #a78bfa;
-      margin-top: 25px;
-      margin-bottom: 12px;
-      font-size: 1.5em;
-    }
-
-    .english-text ul, .english-text ol {
-      margin-left: 30px;
-      margin-bottom: 15px;
-    }
-
-    .english-text li {
-      margin-bottom: 8px;
-    }
-
-    .english-text strong {
-      color: #60a5fa;
-    }
-
-    .english-text code {
-      background: #1e293b;
-      padding: 2px 6px;
+    ::-webkit-scrollbar-thumb {
+      background: #333;
       border-radius: 4px;
-      color: #a78bfa;
     }
 
-    .cost-info {
-      background: #1e3a8a;
-      border-left: 4px solid #60a5fa;
-      padding: 16px 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      font-size: 0.95em;
-      color: #dbeafe;
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
     }
 
-    .cost-info strong {
-      color: #93c5fd;
-    }
-
-    .debug-console {
-      background: #1c1917;
-      border: 2px solid #78716c;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 20px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-
-    .debug-console h3 {
-      color: #fbbf24;
-      margin-bottom: 15px;
-      font-size: 1.1em;
-    }
-
-    .debug-log {
-      color: #a8a29e;
-      line-height: 1.8;
-    }
-
-    .debug-log div {
-      padding: 4px 0;
-      border-bottom: 1px solid #292524;
-    }
-
-    .debug-log .success {
-      color: #10b981;
-    }
-
-    .debug-log .error {
-      color: #ef4444;
-    }
-
-    .debug-log .info {
-      color: #60a5fa;
-    }
-
-    .debug-log .warning {
-      color: #fbbf24;
-    }
-
-    @media (max-width: 768px) {
-      .options {
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .main-layout {
         grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
       }
 
-      .header h1 {
-        font-size: 2em;
+      .loading-overlay {
+        left: 0;
       }
 
-      .main {
-        padding: 20px;
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid #333;
+        max-height: 50vh;
       }
-    }
-
-    /* Custom scrollbar */
-    .tab-content::-webkit-scrollbar {
-      width: 10px;
-    }
-
-    .tab-content::-webkit-scrollbar-track {
-      background: #1e293b;
-      border-radius: 10px;
-    }
-
-    .tab-content::-webkit-scrollbar-thumb {
-      background: #475569;
-      border-radius: 10px;
-    }
-
-    .tab-content::-webkit-scrollbar-thumb:hover {
-      background: #60a5fa;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="app">
+    <!-- Header -->
     <div class="header">
       <h1>🗡️ Oshi3 Nihonto Translator</h1>
-      <p>Upload a Japanese sword catalog image for instant AI translation</p>
+      <div class="header-info">Japanese Sword Catalog OCR & Translation</div>
     </div>
 
-    <div class="main">
-      <!-- Debug Console -->
-      <div class="debug-console">
-        <h3>🔍 Debug Console</h3>
-        <div class="debug-log" id="debugLog">
-          <div class="info">Ready. Upload an image and click Translate to see debug info...</div>
+    <!-- Main Layout -->
+    <div class="main-layout">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Error Display -->
+        <div class="error-message" id="error"></div>
+
+        <!-- Upload Zone -->
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-icon">📄</div>
+          <h3>Drop image here or click to browse</h3>
+          <p>JPG, PNG - Setsumei catalog page</p>
+          <input type="file" id="fileInput" class="file-input" accept="image/*">
+        </div>
+
+        <!-- Preview -->
+        <div class="preview" id="preview">
+          <img id="previewImage" alt="Preview">
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+          <div class="control-group">
+            <label for="modelSelect">Translation Model</label>
+            <select id="modelSelect">
+              <option value="openai/gpt-5.2">GPT-5.2 ($0.046/item)</option>
+              <option value="anthropic/claude-sonnet-4.5">Claude Sonnet 4.5 ($0.043)</option>
+              <option value="qwen/qwen-2.5-72b-instruct">Qwen 2.5 72B ($0.017)</option>
+              <option value="deepseek/deepseek-v3.2">DeepSeek V3.2 ($0.018)</option>
+            </select>
+          </div>
+
+          <div class="info-banner">
+            Pipeline: Google Vision OCR → Claude OCR Correction → Selected Model Translation (~30-60s)
+          </div>
+
+          <button class="translate-btn" id="translateBtn" disabled>
+            Translate
+          </button>
         </div>
       </div>
 
-      <!-- Error Display -->
-      <div class="error" id="error"></div>
-
-      <!-- Upload Section -->
-      <div class="upload-section" id="uploadSection">
-        <div class="upload-icon">📄</div>
-        <h2>Drop your image here or click to upload</h2>
-        <p style="margin: 15px 0;">Supported: JPG, PNG (setsumei page from sword catalog)</p>
-        <input type="file" id="fileInput" class="file-input" accept="image/*">
-        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
-          Choose File
-        </button>
-      </div>
-
-      <!-- Preview -->
-      <div class="preview-section" id="previewSection">
-        <h3>📷 Uploaded Image:</h3>
-        <img id="previewImage" alt="Preview">
-      </div>
-
-      <!-- Options -->
-      <div class="options">
-        <div class="option-group">
-          <label for="modelSelect">Translation Model:</label>
-          <select id="modelSelect">
-            <option value="openai/gpt-5.2">GPT-5.2 (Most Accurate) - $0.046/item</option>
-            <option value="anthropic/claude-sonnet-4.5">Claude Sonnet 4.5 - $0.043/item</option>
-            <option value="qwen/qwen-2.5-72b-instruct">Qwen 2.5 72B (Budget) - $0.017/item</option>
-            <option value="deepseek/deepseek-v3.2">DeepSeek V3.2 - $0.018/item</option>
-          </select>
-        </div>
-        <div class="option-group">
-          <label for="formatSelect">Output Format:</label>
-          <select id="formatSelect">
-            <option value="markdown">Markdown (Full Details)</option>
-            <option value="plain">Plain Text</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="cost-info">
-        <strong>ℹ️ Processing Pipeline:</strong> Each translation runs 3 steps: Google Cloud Vision OCR ($0.0015) + Claude OCR Correction ($0.015) + Your Selected Model. Total time: ~30-60 seconds.
-      </div>
-
-      <!-- Translate Button -->
-      <button class="translate-btn" id="translateBtn" onclick="startTranslation()" disabled>
-        Translate
-      </button>
-
-      <!-- Loading -->
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div class="loading-text">Processing your image...</div>
-        <div class="loading-step" id="loadingStep">Uploading image...</div>
-      </div>
-
-      <!-- Results -->
-      <div class="results" id="results">
+      <!-- Results Area -->
+      <div class="results-area">
+        <!-- Tabs -->
         <div class="tabs">
-          <button class="tab active" onclick="showTab('japanese')">Japanese (Corrected OCR)</button>
-          <button class="tab" onclick="showTab('english')">English Translation</button>
+          <button class="tab active" data-tab="japanese">Japanese (Corrected OCR)</button>
+          <button class="tab" data-tab="english">English Translation</button>
         </div>
 
+        <!-- Tab Content -->
         <div class="tab-content active" id="japaneseTab">
-          <div class="japanese-text" id="japaneseText"></div>
+          <div class="empty-state">
+            <div class="empty-state-icon">🗡️</div>
+            <h3>No translation yet</h3>
+            <p>Upload an image and click Translate to see the corrected Japanese OCR</p>
+          </div>
         </div>
 
         <div class="tab-content" id="englishTab">
-          <div class="english-text" id="englishText"></div>
+          <div class="empty-state">
+            <div class="empty-state-icon">🗡️</div>
+            <h3>No translation yet</h3>
+            <p>Upload an image and click Translate to see the English translation</p>
+          </div>
         </div>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Processing your image...</div>
+        <div class="loading-step" id="loadingStep">Uploading...</div>
       </div>
     </div>
   </div>
@@ -546,42 +529,21 @@
   <script>
     let uploadedFile = null;
 
-    // Debug logging
-    const debugLog = document.getElementById('debugLog');
-    let logCount = 0;
-
-    function addDebugLog(message, type = 'info') {
-      logCount++;
-      const timestamp = new Date().toLocaleTimeString();
-      const logEntry = document.createElement('div');
-      logEntry.className = type;
-      logEntry.textContent = `[${timestamp}] ${logCount}. ${message}`;
-      debugLog.appendChild(logEntry);
-      debugLog.scrollTop = debugLog.scrollHeight;
-      console.log(`[DEBUG ${type.toUpperCase()}]`, message);
-    }
-
-    // Global error handler
-    window.addEventListener('error', (e) => {
-      addDebugLog(`UNCAUGHT ERROR: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
-    });
-
-    window.addEventListener('unhandledrejection', (e) => {
-      addDebugLog(`UNHANDLED PROMISE REJECTION: ${e.reason}`, 'error');
-    });
-
-    // File upload handling
-    const uploadSection = document.getElementById('uploadSection');
+    // Elements
+    const uploadZone = document.getElementById('uploadZone');
     const fileInput = document.getElementById('fileInput');
-    const previewSection = document.getElementById('previewSection');
+    const preview = document.getElementById('preview');
     const previewImage = document.getElementById('previewImage');
     const translateBtn = document.getElementById('translateBtn');
     const errorDiv = document.getElementById('error');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingStep = document.getElementById('loadingStep');
+    const japaneseTab = document.getElementById('japaneseTab');
+    const englishTab = document.getElementById('englishTab');
 
-    addDebugLog('JavaScript loaded successfully', 'success');
-
+    // Error handling
     function showError(message) {
-      errorDiv.innerHTML = `<strong>Error:</strong> ${message}`;
+      errorDiv.textContent = message;
       errorDiv.classList.add('visible');
     }
 
@@ -589,22 +551,24 @@
       errorDiv.classList.remove('visible');
     }
 
+    // Upload zone click
+    uploadZone.addEventListener('click', () => fileInput.click());
+
     // Drag and drop
-    uploadSection.addEventListener('dragover', (e) => {
+    uploadZone.addEventListener('dragover', (e) => {
       e.preventDefault();
-      uploadSection.classList.add('dragover');
+      uploadZone.style.borderColor = '#0070f3';
     });
 
-    uploadSection.addEventListener('dragleave', () => {
-      uploadSection.classList.remove('dragover');
+    uploadZone.addEventListener('dragleave', () => {
+      uploadZone.style.borderColor = '#333';
     });
 
-    uploadSection.addEventListener('drop', (e) => {
+    uploadZone.addEventListener('drop', (e) => {
       e.preventDefault();
-      uploadSection.classList.remove('dragover');
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        handleFile(files[0]);
+      uploadZone.style.borderColor = '#333';
+      if (e.dataTransfer.files.length > 0) {
+        handleFile(e.dataTransfer.files[0]);
       }
     });
 
@@ -615,11 +579,8 @@
     });
 
     function handleFile(file) {
-      addDebugLog(`File selected: ${file.name} (${file.type}, ${(file.size/1024).toFixed(1)} KB)`, 'info');
-
       if (!file.type.startsWith('image/')) {
-        addDebugLog('Invalid file type - not an image', 'error');
-        showError('Please upload an image file (JPG, PNG, etc.)');
+        showError('Please upload an image file (JPG, PNG)');
         return;
       }
 
@@ -630,114 +591,94 @@
       const reader = new FileReader();
       reader.onload = (e) => {
         previewImage.src = e.target.result;
-        previewSection.style.display = 'block';
+        preview.classList.add('visible');
+        uploadZone.classList.add('has-file');
         translateBtn.disabled = false;
-        addDebugLog('Image preview loaded. Translate button enabled.', 'success');
       };
       reader.readAsDataURL(file);
     }
 
     // Tab switching
-    function showTab(tabName) {
-      // Update tab buttons
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      event.target.classList.add('active');
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
 
-      // Update tab content
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      document.getElementById(tabName + 'Tab').classList.add('active');
-    }
+        // Update active tab
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
 
-    function updateLoadingStep(step) {
-      document.getElementById('loadingStep').textContent = step;
-    }
+        // Update active content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(tabName + 'Tab').classList.add('active');
+      });
+    });
 
     // Translation
     async function startTranslation() {
-      addDebugLog('=== TRANSLATION STARTED ===', 'warning');
-
       if (!uploadedFile) {
-        addDebugLog('No file uploaded', 'error');
         showError('Please upload an image first');
         return;
       }
 
-      addDebugLog(`File ready: ${uploadedFile.name}`, 'info');
       hideError();
+      loadingOverlay.classList.add('visible');
+      translateBtn.disabled = true;
+      translateBtn.classList.add('loading');
+      translateBtn.textContent = 'Processing...';
 
       const model = document.getElementById('modelSelect').value;
-      const format = document.getElementById('formatSelect').value;
-      addDebugLog(`Model: ${model}, Format: ${format}`, 'info');
-
-      // Show loading
-      document.getElementById('loading').classList.add('visible');
-      document.getElementById('results').classList.remove('visible');
-      translateBtn.disabled = true;
-      addDebugLog('UI: Loading screen shown, translate button disabled', 'info');
 
       try {
-        // Prepare form data
-        addDebugLog('Creating FormData...', 'info');
         const formData = new FormData();
         formData.append('image', uploadedFile);
         formData.append('model', model);
-        formData.append('format', format);
-        addDebugLog('FormData created successfully', 'success');
 
-        addDebugLog('Sending POST request to /api/translate...', 'info');
-        updateLoadingStep('Step 1/3: Running Google Cloud Vision OCR...');
+        loadingStep.textContent = 'Step 1/3: Running Google Cloud Vision OCR...';
 
-        // Call API
         const response = await fetch('/api/translate', {
           method: 'POST',
           body: formData
         });
 
-        addDebugLog(`Response received! Status: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
-
         if (!response.ok) {
-          addDebugLog('Response not OK, parsing error...', 'warning');
           let errorMessage = 'Translation failed';
           try {
             const error = await response.json();
             errorMessage = error.error || error.message || errorMessage;
-            addDebugLog(`Error from server: ${errorMessage}`, 'error');
           } catch (e) {
-            errorMessage = `Server error: ${response.status} ${response.statusText}`;
-            addDebugLog(`Could not parse error JSON: ${e.message}`, 'error');
+            errorMessage = `Server error: ${response.status}`;
           }
           throw new Error(errorMessage);
         }
 
-        updateLoadingStep('Step 3/3: Finalizing translation...');
-        addDebugLog('Parsing response JSON...', 'info');
+        loadingStep.textContent = 'Step 3/3: Finalizing...';
         const result = await response.json();
-        addDebugLog('Response parsed successfully!', 'success');
-        addDebugLog(`Japanese text length: ${result.japanese?.length || 0} chars`, 'info');
-        addDebugLog(`English text length: ${result.english?.length || 0} chars`, 'info');
 
         // Display results
-        addDebugLog('Rendering results to page...', 'info');
-        document.getElementById('japaneseText').textContent = result.japanese;
-        document.getElementById('englishText').innerHTML = marked.parse(result.english);
+        japaneseTab.innerHTML = `<div class="japanese-text">${result.japanese}</div>`;
+        englishTab.innerHTML = `<div class="english-text">${marked.parse(result.english)}</div>`;
 
-        document.getElementById('loading').classList.remove('visible');
-        document.getElementById('results').classList.add('visible');
+        loadingOverlay.classList.remove('visible');
         translateBtn.disabled = false;
-        addDebugLog('=== TRANSLATION COMPLETE ===', 'success');
+        translateBtn.classList.remove('loading');
+        translateBtn.textContent = 'Translate';
+
+        // Switch to Japanese tab to show results
+        document.querySelector('.tab[data-tab="japanese"]').click();
 
       } catch (error) {
-        addDebugLog(`CAUGHT ERROR: ${error.message}`, 'error');
-        addDebugLog(`Error stack: ${error.stack}`, 'error');
-        document.getElementById('loading').classList.remove('visible');
-        showError(error.message || 'Translation failed. Please check the console for details.');
+        console.error('Translation error:', error);
+        loadingOverlay.classList.remove('visible');
+        showError(error.message || 'Translation failed');
         translateBtn.disabled = false;
+        translateBtn.classList.remove('loading');
+        translateBtn.textContent = 'Translate';
       }
     }
+
+    translateBtn.addEventListener('click', startTranslation);
   </script>
 </body>
 </html>

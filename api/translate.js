@@ -194,9 +194,21 @@ ${correctedOCR}
 }
 
 /**
+ * Helper to get raw body as buffer
+ */
+async function getRawBody(req) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    req.on('data', (chunk) => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks)));
+    req.on('error', reject);
+  });
+}
+
+/**
  * Vercel Function handler
  */
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -215,10 +227,11 @@ module.exports = async (req, res) => {
   try {
     // Get raw body buffer
     const contentType = req.headers['content-type'] || '';
+    const bodyBuffer = await getRawBody(req);
 
     // Parse multipart form data
     const boundary = multipart.getBoundary(contentType);
-    const parts = multipart.parse(req.body, boundary);
+    const parts = multipart.parse(bodyBuffer, boundary);
 
     // Extract image and parameters
     const imagePart = parts.find(part => part.name === 'image');
@@ -262,3 +275,12 @@ module.exports = async (req, res) => {
     });
   }
 };
+
+// Disable Vercel's automatic body parsing
+handler.config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+module.exports = handler;
