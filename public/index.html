@@ -359,18 +359,20 @@
     /* Loading Overlay */
     .loading-overlay {
       display: none;
-      position: absolute;
-      top: 0;
-      left: 400px;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(4px);
+      position: fixed;
+      top: 80px;
+      left: 24px;
+      width: 352px;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(8px);
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 24px;
       z-index: 100;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
+      align-items: center;
       gap: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     }
 
     .loading-overlay.visible {
@@ -455,7 +457,10 @@
       }
 
       .loading-overlay {
-        left: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 48px);
+        max-width: 400px;
       }
 
       .sidebar {
