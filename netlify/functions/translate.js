@@ -3,7 +3,9 @@ const multipart = require('parse-multipart-data');
 
 // Initialize Google Cloud Vision client
 const visionClient = new vision.ImageAnnotatorClient({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+  credentials: JSON.parse(
+    Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString()
+  )
 });
 
 const OPENROUTER_API = 'https://openrouter.ai/api/v1/chat/completions';
