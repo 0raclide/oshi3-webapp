@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Oshi3 Nihonto Translation</title>
+  <title>Oshi3 Nihonto Translator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -12,66 +13,86 @@
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
       min-height: 100vh;
-      padding: 20px;
+      line-height: 1.6;
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
+      padding: 20px;
     }
 
     .header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 30px;
       text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 20px;
+      margin-bottom: 40px;
+      border: 1px solid #334155;
     }
 
     .header h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
+      font-size: 3em;
+      font-weight: 700;
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
     }
 
     .header p {
-      font-size: 1.1em;
-      opacity: 0.9;
+      font-size: 1.2em;
+      color: #94a3b8;
     }
 
     .main {
+      background: #1e293b;
+      border-radius: 20px;
       padding: 40px;
+      border: 1px solid #334155;
     }
 
     .upload-section {
-      border: 3px dashed #ccc;
-      border-radius: 8px;
-      padding: 40px;
+      border: 3px dashed #475569;
+      border-radius: 16px;
+      padding: 60px 40px;
       text-align: center;
       margin-bottom: 30px;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
       cursor: pointer;
+      background: #0f172a;
     }
 
     .upload-section:hover {
-      border-color: #667eea;
-      background: #f8f9ff;
+      border-color: #60a5fa;
+      background: #1e293b;
     }
 
     .upload-section.dragover {
-      border-color: #667eea;
-      background: #f0f2ff;
+      border-color: #60a5fa;
+      background: #1e293b;
+      transform: scale(1.02);
     }
 
     .upload-icon {
-      font-size: 4em;
+      font-size: 5em;
       margin-bottom: 20px;
-      color: #667eea;
+      filter: grayscale(0.3);
+    }
+
+    .upload-section h2 {
+      font-size: 1.5em;
+      color: #e2e8f0;
+      margin-bottom: 10px;
+    }
+
+    .upload-section p {
+      color: #94a3b8;
+      font-size: 1em;
     }
 
     .file-input {
@@ -79,23 +100,42 @@
     }
 
     .upload-btn {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
       color: white;
       border: none;
-      padding: 15px 40px;
+      padding: 16px 40px;
       font-size: 1.1em;
-      border-radius: 8px;
+      font-weight: 600;
+      border-radius: 12px;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.3s ease;
+      margin-top: 20px;
     }
 
     .upload-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
     }
 
-    .upload-btn:active {
-      transform: translateY(0);
+    .preview-section {
+      display: none;
+      margin-bottom: 30px;
+      background: #0f172a;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid #334155;
+    }
+
+    .preview-section h3 {
+      margin-bottom: 15px;
+      color: #e2e8f0;
+      font-size: 1.2em;
+    }
+
+    .preview-section img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid #334155;
     }
 
     .options {
@@ -105,64 +145,120 @@
       margin-bottom: 30px;
     }
 
-    .option-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
     .option-group label {
+      display: block;
       font-weight: 600;
-      color: #333;
-      font-size: 1.1em;
+      color: #e2e8f0;
+      font-size: 1em;
+      margin-bottom: 10px;
     }
 
     .option-group select {
-      padding: 12px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
+      width: 100%;
+      padding: 14px;
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      color: #e2e8f0;
       font-size: 1em;
-      transition: border-color 0.3s;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .option-group select:hover {
+      border-color: #475569;
     }
 
     .option-group select:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #60a5fa;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
     }
 
     .translate-btn {
       width: 100%;
-      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: white;
       border: none;
-      padding: 18px;
-      font-size: 1.2em;
-      font-weight: 600;
-      border-radius: 8px;
+      padding: 20px;
+      font-size: 1.3em;
+      font-weight: 700;
+      border-radius: 12px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
       margin-bottom: 30px;
     }
 
-    .translate-btn:hover {
+    .translate-btn:hover:not(:disabled) {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
     }
 
     .translate-btn:disabled {
-      background: #ccc;
+      background: #334155;
       cursor: not-allowed;
       transform: none;
     }
 
-    .preview-section {
+    .loading {
+      display: none;
+      background: #0f172a;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
       margin-bottom: 30px;
+      border: 1px solid #334155;
     }
 
-    .preview-section img {
-      max-width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .loading.visible {
+      display: block;
+    }
+
+    .spinner {
+      border: 4px solid #334155;
+      border-top: 4px solid #60a5fa;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 1.3em;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .loading-step {
+      color: #94a3b8;
+      font-size: 1em;
+    }
+
+    .error {
+      background: #7f1d1d;
+      border: 2px solid #dc2626;
+      color: #fecaca;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .error.visible {
+      display: block;
+    }
+
+    .error strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1em;
     }
 
     .results {
@@ -177,36 +273,39 @@
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
-      border-bottom: 2px solid #eee;
+      border-bottom: 2px solid #334155;
     }
 
     .tab {
-      padding: 15px 30px;
+      padding: 16px 30px;
       background: none;
       border: none;
       border-bottom: 3px solid transparent;
       font-size: 1.1em;
       font-weight: 600;
-      color: #666;
+      color: #94a3b8;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s ease;
     }
 
     .tab:hover {
-      color: #667eea;
+      color: #e2e8f0;
     }
 
     .tab.active {
-      color: #667eea;
-      border-bottom-color: #667eea;
+      color: #60a5fa;
+      border-bottom-color: #60a5fa;
     }
 
     .tab-content {
       display: none;
       padding: 30px;
-      background: #f9f9f9;
-      border-radius: 8px;
-      min-height: 400px;
+      background: #0f172a;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      min-height: 500px;
+      max-height: 800px;
+      overflow-y: auto;
     }
 
     .tab-content.active {
@@ -214,91 +313,65 @@
     }
 
     .japanese-text {
-      font-family: 'MS Mincho', 'Yu Mincho', serif;
-      font-size: 1.2em;
-      line-height: 2;
+      font-family: 'MS Mincho', 'Yu Mincho', 'Noto Serif JP', serif;
+      font-size: 1.3em;
+      line-height: 2.2;
       white-space: pre-wrap;
-      color: #333;
+      color: #e2e8f0;
     }
 
     .english-text {
       font-size: 1.05em;
-      line-height: 1.8;
-      color: #333;
+      line-height: 1.9;
+      color: #e2e8f0;
     }
 
     .english-text h1 {
-      color: #667eea;
+      color: #60a5fa;
       margin-top: 30px;
       margin-bottom: 15px;
+      font-size: 2em;
     }
 
     .english-text h2 {
-      color: #764ba2;
+      color: #a78bfa;
       margin-top: 25px;
       margin-bottom: 12px;
+      font-size: 1.5em;
     }
 
-    .english-text ul {
-      margin-left: 20px;
+    .english-text ul, .english-text ol {
+      margin-left: 30px;
       margin-bottom: 15px;
     }
 
-    .loading {
-      display: none;
-      text-align: center;
-      padding: 40px;
+    .english-text li {
+      margin-bottom: 8px;
     }
 
-    .loading.visible {
-      display: block;
+    .english-text strong {
+      color: #60a5fa;
     }
 
-    .spinner {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #667eea;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-text {
-      font-size: 1.2em;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .loading-step {
-      color: #999;
-      font-size: 0.95em;
-    }
-
-    .error {
-      background: #fee;
-      border: 2px solid #fcc;
-      color: #c33;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
+    .english-text code {
+      background: #1e293b;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #a78bfa;
     }
 
     .cost-info {
-      background: #f0f8ff;
-      border-left: 4px solid #667eea;
-      padding: 15px;
+      background: #1e3a8a;
+      border-left: 4px solid #60a5fa;
+      padding: 16px 20px;
       margin-bottom: 20px;
-      border-radius: 4px;
+      border-radius: 8px;
+      font-size: 0.95em;
+      color: #dbeafe;
     }
 
     .cost-info strong {
-      color: #667eea;
+      color: #93c5fd;
     }
 
     @media (max-width: 768px) {
@@ -307,24 +380,50 @@
       }
 
       .header h1 {
-        font-size: 1.8em;
+        font-size: 2em;
       }
+
+      .main {
+        padding: 20px;
+      }
+    }
+
+    /* Custom scrollbar */
+    .tab-content::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .tab-content::-webkit-scrollbar-track {
+      background: #1e293b;
+      border-radius: 10px;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 10px;
+    }
+
+    .tab-content::-webkit-scrollbar-thumb:hover {
+      background: #60a5fa;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>🗡️ Oshi3 Nihonto Translation</h1>
-      <p>Upload a Japanese sword catalog image for instant translation</p>
+      <h1>🗡️ Oshi3 Nihonto Translator</h1>
+      <p>Upload a Japanese sword catalog image for instant AI translation</p>
     </div>
 
     <div class="main">
+      <!-- Error Display -->
+      <div class="error" id="error"></div>
+
       <!-- Upload Section -->
       <div class="upload-section" id="uploadSection">
         <div class="upload-icon">📄</div>
         <h2>Drop your image here or click to upload</h2>
-        <p style="margin: 20px 0; color: #666;">Supported: JPG, PNG (setsumei page from Juyo Zufu catalog)</p>
+        <p style="margin: 15px 0;">Supported: JPG, PNG (setsumei page from sword catalog)</p>
         <input type="file" id="fileInput" class="file-input" accept="image/*">
         <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
           Choose File
@@ -332,8 +431,8 @@
       </div>
 
       <!-- Preview -->
-      <div class="preview-section" id="previewSection" style="display: none;">
-        <h3 style="margin-bottom: 15px;">📷 Uploaded Image:</h3>
+      <div class="preview-section" id="previewSection">
+        <h3>📷 Uploaded Image:</h3>
         <img id="previewImage" alt="Preview">
       </div>
 
@@ -358,8 +457,7 @@
       </div>
 
       <div class="cost-info">
-        <strong>ℹ️ Note:</strong> Each translation runs 3 steps: Google Cloud Vision OCR ($0.0015) +
-        Claude OCR Correction ($0.015) + Your Selected Model. Total processing time: ~30-60 seconds.
+        <strong>ℹ️ Processing Pipeline:</strong> Each translation runs 3 steps: Google Cloud Vision OCR ($0.0015) + Claude OCR Correction ($0.015) + Your Selected Model. Total time: ~30-60 seconds.
       </div>
 
       <!-- Translate Button -->
@@ -371,7 +469,7 @@
       <div class="loading" id="loading">
         <div class="spinner"></div>
         <div class="loading-text">Processing your image...</div>
-        <div class="loading-step" id="loadingStep">Initializing...</div>
+        <div class="loading-step" id="loadingStep">Uploading image...</div>
       </div>
 
       <!-- Results -->
@@ -402,6 +500,16 @@
     const previewSection = document.getElementById('previewSection');
     const previewImage = document.getElementById('previewImage');
     const translateBtn = document.getElementById('translateBtn');
+    const errorDiv = document.getElementById('error');
+
+    function showError(message) {
+      errorDiv.innerHTML = `<strong>Error:</strong> ${message}`;
+      errorDiv.classList.add('visible');
+    }
+
+    function hideError() {
+      errorDiv.classList.remove('visible');
+    }
 
     // Drag and drop
     uploadSection.addEventListener('dragover', (e) => {
@@ -429,12 +537,15 @@
     });
 
     function handleFile(file) {
+      console.log('File selected:', file.name);
+
       if (!file.type.startsWith('image/')) {
-        alert('Please upload an image file');
+        showError('Please upload an image file (JPG, PNG, etc.)');
         return;
       }
 
       uploadedFile = file;
+      hideError();
 
       // Show preview
       const reader = new FileReader();
@@ -461,12 +572,19 @@
       document.getElementById(tabName + 'Tab').classList.add('active');
     }
 
+    function updateLoadingStep(step) {
+      document.getElementById('loadingStep').textContent = step;
+    }
+
     // Translation
     async function translate() {
       if (!uploadedFile) {
-        alert('Please upload an image first');
+        showError('Please upload an image first');
         return;
       }
+
+      console.log('Starting translation...');
+      hideError();
 
       const model = document.getElementById('modelSelect').value;
       const format = document.getElementById('formatSelect').value;
@@ -483,7 +601,7 @@
         formData.append('model', model);
         formData.append('format', format);
 
-        // Step 1: OCR
+        console.log('Sending request to API...');
         updateLoadingStep('Step 1/3: Running Google Cloud Vision OCR...');
 
         // Call API
@@ -492,12 +610,22 @@
           body: formData
         });
 
+        console.log('Response status:', response.status);
+
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || 'Translation failed');
+          let errorMessage = 'Translation failed';
+          try {
+            const error = await response.json();
+            errorMessage = error.error || error.message || errorMessage;
+          } catch (e) {
+            errorMessage = `Server error: ${response.status} ${response.statusText}`;
+          }
+          throw new Error(errorMessage);
         }
 
+        updateLoadingStep('Step 3/3: Finalizing translation...');
         const result = await response.json();
+        console.log('Translation complete!');
 
         // Display results
         document.getElementById('japaneseText').textContent = result.japanese;
@@ -508,22 +636,11 @@
         translateBtn.disabled = false;
 
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Translation error:', error);
         document.getElementById('loading').classList.remove('visible');
-        alert('Translation error: ' + error.message);
+        showError(error.message || 'Translation failed. Please check the console for details.');
         translateBtn.disabled = false;
       }
-    }
-
-    function updateLoadingStep(step) {
-      document.getElementById('loadingStep').textContent = step;
-    }
-
-    // Simulate loading steps (will be replaced by actual SSE events from backend)
-    function simulateLoadingSteps() {
-      setTimeout(() => updateLoadingStep('Step 1/3: Running Google Cloud Vision OCR...'), 1000);
-      setTimeout(() => updateLoadingStep('Step 2/3: Correcting OCR with Claude...'), 8000);
-      setTimeout(() => updateLoadingStep('Step 3/3: Translating to English...'), 18000);
     }
   </script>
 </body>
