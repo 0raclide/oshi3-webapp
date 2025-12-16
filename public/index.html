@@ -513,7 +513,7 @@
       </div>
 
       <!-- Translate Button -->
-      <button class="translate-btn" id="translateBtn" onclick="translate()" disabled>
+      <button class="translate-btn" id="translateBtn" onclick="startTranslation()" disabled>
         Translate
       </button>
 
@@ -657,8 +657,8 @@
     }
 
     // Translation
-    async function translate() {
-      addDebugLog('=== TRANSLATE FUNCTION CALLED ===', 'warning');
+    async function startTranslation() {
+      addDebugLog('=== TRANSLATION STARTED ===', 'warning');
 
       if (!uploadedFile) {
         addDebugLog('No file uploaded', 'error');
