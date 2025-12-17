@@ -109,9 +109,11 @@ Translate the Japanese text into scholarly English following this exact format a
 
 **FORMAT:**
 
-[Classification header: e.g., "Tokubetsu-Jūyō Tōken at the 27th Tokubetsu-Jūyō Shinsa from April 20, 2022"]
+[Classification header - translate exactly as written, e.g.:]
+- "Tokubetsu-Jūyō Tōken at the 27th Tokubetsu-Jūyō Shinsa from April 20, 2022"
+- "Jūyō-Tōken at the 70th Jūyō Shinsa from November 6, 2024"
 
-[Item line: e.g., "Katana, mumei: Hōshō (保昌)"]
+[Item line: e.g., "Katana, mumei: Hōshō (保昌)" or "Katana, kinzōgan-mei: Yukimitsu – Hon'a + kaō (Kōyū)"]
 
 [Author credit if present: e.g., "Ōhira Takeko (大平岳子)"]
 
@@ -135,26 +137,32 @@ Nakago: [tang description]
 [Time period]
 
 **Explanation**
-[Detailed historical and technical analysis in flowing paragraphs - translate completely and verbatim]
+[Detailed historical and technical analysis in flowing paragraphs - translate completely and verbatim, preserving all details about the smith's history, techniques, comparisons, and analysis]
+
+**CRITICAL TRANSLATION RULES:**
+1. **Classification header**: Distinguish carefully between "Jūyō-Tōken" (重要刀剣) and "Tokubetsu-Jūyō Tōken" (特別重要刀剣) - these are different certifications
+2. **Proper names**: Romanize Japanese names correctly - do NOT translate them (e.g., "Hon'ami Kōyū" not "Hon'ami Mitsuo")
+3. **Explanation section**: Translate EVERY detail completely - include all historical context, technical analysis, and scholarly observations from the Japanese text
+4. **Names with dates**: When mentioning historical figures, preserve their dates if given (e.g., "Hon'ami Kōyū (本阿弥光勇, 1704–1770)")
 
 **CRITICAL STYLE RULES:**
 1. Use **bold** for section headings (NOT ## markdown headers)
-2. Use *italics* for ALL Japanese technical terms (keijō, kitae, hamon, nie-deki, masame, chū-suguha, etc.)
+2. Use *italics* for ALL Japanese technical terms (keijō, kitae, hamon, nie-deki, masame, chū-suguha, itame, mokume, etc.)
 3. Write descriptions in flowing paragraphs, NOT bullet points
 4. Keep Japanese technical terminology in romanized form with contextual English (e.g., "chū-suguha in nie-deki" not "medium straight tempering pattern")
-5. Be concise and scholarly - avoid over-explanation
-6. Translate the explanation section completely but maintain scholarly tone
-7. Do NOT include Japanese characters (kanji/hiragana/katakana) except in the item line where they appear in the original
-8. Use measurements in the abbreviated inline format shown above
+5. Be scholarly and thorough - translate the explanation section completely with all details
+6. Do NOT include Japanese characters (kanji/hiragana/katakana) except where they naturally appear in the item line or when giving dates/readings
+7. Use measurements in the abbreviated inline format shown above
 
 **EXAMPLES OF CORRECT STYLE:**
 ✓ "wide mihaba, relatively noticeable taper, deep koshizori"
 ✓ "chū-suguha in nie-deki and a bright and clear nioiguchi"
-✓ "densely forged masame that features plenty of fine ji-nie"
+✓ "densely forged itame that is mixed with mokume"
+✓ "Hon'ami Kōyū's (本阿弥光勇, 1704–1770) attribution"
 ✗ "Medium-width blade base with significant tapering and deep curvature"
 ✗ "The tempering is a medium straight line made with nie particles"
 
-Maintain the natural, scholarly flow of authentic sword catalog translations.
+Maintain the natural, scholarly flow of authentic sword catalog translations with complete historical and technical detail.
 
 **Japanese Text:**
 ${correctedOCR}
