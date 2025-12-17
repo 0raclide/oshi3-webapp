@@ -103,72 +103,63 @@ ${rawOCR}
  * Step 3: Translate to English
  */
 async function translateToMarkdown(correctedOCR, model) {
-  const translationPrompt = `You are a specialist in translating Japanese sword catalog entries (重要刀剣等図譜).
+  const translationPrompt = `You are a specialist in translating Japanese sword catalog entries for Tokubetsu-Jūyō and Jūyō certifications.
 
-**CRITICAL INSTRUCTIONS:**
-1. Translate EVERY SINGLE WORD and detail from the Japanese text into English
-2. Do NOT summarize, condense, or omit ANY information
-3. Translate technical terminology directly into English (do NOT include Japanese in parentheses)
-4. Only use parentheses for brief English clarifications or explanations, never for Japanese text
-5. Include ALL measurements, dates, names, and descriptions fully translated to English
-6. Maintain the original structure and flow
-7. If the Japanese mentions something, it MUST appear in the English translation
-8. Translate the historical background section VERBATIM and COMPLETELY into English
+Translate the Japanese text into scholarly English following this exact format and style:
 
-**Output Format:**
+**FORMAT:**
 
-# [Sword Type] - [Smith/School Name]
+[Classification header: e.g., "Tokubetsu-Jūyō Tōken at the 27th Tokubetsu-Jūyō Shinsa from April 20, 2022"]
 
-## Basic Information
-- **Classification:** [太刀/脇指/短刀/etc.]
-- **Signature (銘):** [Transcribe signature]
-- **Attribution:** [If unsigned, the attributed smith/school]
-- **Period:** [Estimated period/era]
+[Item line: e.g., "Katana, mumei: Hōshō (保昌)"]
 
-## Measurements (法量)
-- **Total Length:** [XX cm]
-- **Blade Length:** [XX cm]
-- **Curvature (反り):** [XX cm]
-- **Base Width (元幅):** [XX cm]
-- **Tip Width (先幅):** [XX cm]
-- **Blade Thickness:** [XX cm]
+[Author credit if present: e.g., "Ōhira Takeko (大平岳子)"]
 
-## Physical Description (形状)
-[Detailed description of blade shape, curvature, thickness, tip form, etc.]
+**Measurements**
+[Inline comma-separated format with italicized Japanese terms, e.g.:]
+Nagasa 68.3 cm, sori 2.0 cm, motohaba 3.2 cm, sakihaba 2.2 cm, kissaki-nagasa 3.8 cm, nakago-nagasa 18.0 cm, almost no nakago-sori
 
-## Hamon (刃文) - Temper Pattern
-[Description of the temper line pattern]
+**Description**
+[Paragraph format with subsections using italicized labels:]
+Keijō: [blade construction and shape in flowing prose]
+Kitae: [steel grain pattern description]
+Hamon: [temper line description]
+Bōshi: [tip temper pattern]
+Horimono: [groove/carving if present]
+Nakago: [tang description]
 
-## Jigane (地鉄) - Steel Pattern
-[Description of the steel grain pattern]
+**Artisan**
+[Smith or school attribution]
 
-## Nakago (茎) - Tang
-[Description of tang condition, file marks, patina, holes, etc.]
+**Era**
+[Time period]
 
-## Historical Background (説明)
-[Translate the ENTIRE explanation section verbatim - include all information about the smith, school, historical context, brothers/family, imperial appointments, comparisons, condition notes, etc. - DO NOT SUMMARIZE]
+**Explanation**
+[Detailed historical and technical analysis in flowing paragraphs - translate completely and verbatim]
 
-## Fittings/Mountings (附属)
-[If mentioned, describe all fittings and mountings in detail]
+**CRITICAL STYLE RULES:**
+1. Use **bold** for section headings (NOT ## markdown headers)
+2. Use *italics* for ALL Japanese technical terms (keijō, kitae, hamon, nie-deki, masame, chū-suguha, etc.)
+3. Write descriptions in flowing paragraphs, NOT bullet points
+4. Keep Japanese technical terminology in romanized form with contextual English (e.g., "chū-suguha in nie-deki" not "medium straight tempering pattern")
+5. Be concise and scholarly - avoid over-explanation
+6. Translate the explanation section completely but maintain scholarly tone
+7. Do NOT include Japanese characters (kanji/hiragana/katakana) except in the item line where they appear in the original
+8. Use measurements in the abbreviated inline format shown above
 
-## Provenance (伝来)
-[If mentioned separately, include historical ownership]
+**EXAMPLES OF CORRECT STYLE:**
+✓ "wide mihaba, relatively noticeable taper, deep koshizori"
+✓ "chū-suguha in nie-deki and a bright and clear nioiguchi"
+✓ "densely forged masame that features plenty of fine ji-nie"
+✗ "Medium-width blade base with significant tapering and deep curvature"
+✗ "The tempering is a medium straight line made with nie particles"
 
-## Notes
-[Any additional observations or scholarly notes]
-
----
-
-**IMPORTANT FORMATTING RULES:**
-- Write ONLY in English - do not include Japanese characters, hiragana, katakana, or kanji anywhere in your translation
-- Translate all Japanese terms into English equivalents
-- If a technical term needs explanation, provide it in English within parentheses
-- Example: Instead of "notare (のたれ)", write "notare (undulating pattern)" or simply "undulating temper line"
+Maintain the natural, scholarly flow of authentic sword catalog translations.
 
 **Japanese Text:**
 ${correctedOCR}
 
-**English Translation (Markdown):**`;
+**English Translation:**`;
 
   const response = await fetch(OPENROUTER_API, {
     method: 'POST',
