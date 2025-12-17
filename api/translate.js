@@ -140,10 +140,19 @@ Nakago: [tang description]
 [Detailed historical and technical analysis in flowing paragraphs - translate completely and verbatim, preserving all details about the smith's history, techniques, comparisons, and analysis]
 
 **CRITICAL TRANSLATION RULES:**
-1. **Classification header**: Distinguish carefully between "Jūyō-Tōken" (重要刀剣) and "Tokubetsu-Jūyō Tōken" (特別重要刀剣) - these are different certifications
-2. **Proper names**: Romanize Japanese names correctly - do NOT translate them (e.g., "Hon'ami Kōyū" not "Hon'ami Mitsuo")
-3. **Explanation section**: Translate EVERY detail completely - include all historical context, technical analysis, and scholarly observations from the Japanese text
-4. **Names with dates**: When mentioning historical figures, preserve their dates if given (e.g., "Hon'ami Kōyū (本阿弥光勇, 1704–1770)")
+1. **Classification header**: NEVER confuse certification levels:
+   - "Jūyō-Tōken" (重要刀剣) = Important Sword - translate as "Jūyō-Tōken at the [number]th Jūyō Shinsa from [date]"
+   - "Tokubetsu-Jūyō Tōken" (特別重要刀剣) = Especially Important Sword - translate as "Tokubetsu-Jūyō Tōken at the [number]th Tokubetsu-Jūyō Shinsa from [date]"
+   - "Tokubetsu Hozon" (特別保存) = Special Preservation - this is a DIFFERENT, LOWER certification level
+   - Read the Japanese text carefully to identify which certification is actually being described
+2. **Hon'ami family names**: Use on'yomi (Chinese readings), NOT kun'yomi (Japanese readings):
+   - 光勇 = "Kōyū" (correct) NOT "Mitsuhaya" (wrong)
+   - 光忠 = "Kōchū" (correct) NOT "Mitsutada" (wrong)
+   - 光徳 = "Kōtoku" (correct) NOT "Mitsunori" (wrong)
+   - Pattern: 光 = "Kō" (not "Mitsu"), 勇 = "Yū" (not "Haya"), 忠 = "Chū" (not "Tada"), 徳 = "Toku" (not "Nori")
+3. **Proper names**: Romanize Japanese names correctly - do NOT translate them into different names
+4. **Explanation section**: Translate EVERY detail completely - include all historical context, technical analysis, and scholarly observations from the Japanese text
+5. **Names with dates**: When mentioning historical figures, preserve their dates if given (e.g., "Hon'ami Kōyū (本阿弥光勇, 1704–1770)")
 
 **CRITICAL STYLE RULES:**
 1. Use **bold** for section headings (NOT ## markdown headers)
@@ -159,8 +168,12 @@ Nakago: [tang description]
 ✓ "chū-suguha in nie-deki and a bright and clear nioiguchi"
 ✓ "densely forged itame that is mixed with mokume"
 ✓ "Hon'ami Kōyū's (本阿弥光勇, 1704–1770) attribution"
+✓ "Jūyō-Tōken at the 70th Jūyō Shinsa from November 6, 2024"
+✓ "kinzōgan-mei: Yukimitsu – Hon'a + kaō (Kōyū)"
 ✗ "Medium-width blade base with significant tapering and deep curvature"
 ✗ "The tempering is a medium straight line made with nie particles"
+✗ "Tokubetsu Hozon-designated" (when the text says Jūyō)
+✗ "Hon'ami Mitsuhaya" (should be "Kōyū" for 光勇)
 
 Maintain the natural, scholarly flow of authentic sword catalog translations with complete historical and technical detail.
 
